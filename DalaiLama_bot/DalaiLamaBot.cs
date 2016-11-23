@@ -61,8 +61,7 @@ namespace DalaiLama_bot
             commands.CreateCommand("confess")
                 .Alias(new string[] { "confession" })
                 .Parameter("confession", ParameterType.Unparsed)
-                .Do(async (e) =>
-
+                .Do(async (e) =>           
             {
                 await e.Message.Delete();
                 await e.Server.GetChannel(248177041847877634).SendMessage(e.GetArg("confession")); //takes the command in any channel and sends it to channel #confessions
@@ -72,11 +71,9 @@ namespace DalaiLama_bot
             commands.CreateCommand("compliment")
                 .Parameter("x", ParameterType.Required)
                 .Do(async (e) =>
-
              {
                  await e.Channel.SendMessage(compliment() + " " + e.GetArg("x"));
              });
-
 
             //command to get all roles their ID's
             commands.CreateCommand("getrolesid")
@@ -137,6 +134,7 @@ namespace DalaiLama_bot
                             commandDenied(e.Channel);
                         }
                     });
+
                 cgb.CreateCommand("start"). //start the voting
                 Do(async (e) =>
                 {
@@ -165,6 +163,7 @@ namespace DalaiLama_bot
                         commandDenied(e.Channel);
                     }
                 });
+
                 cgb.CreateCommand("vote").  //vote for an answer
                 Parameter("x", ParameterType.Required).
                 Do(async (e) =>
@@ -195,8 +194,6 @@ namespace DalaiLama_bot
                             {
                                 await e.Channel.SendMessage("You have already voted");
                             }
-                            
-
                         }
                         else
                         {
@@ -208,6 +205,7 @@ namespace DalaiLama_bot
                         commandDenied(e.Channel);
                     }
                 });
+
                 cgb.CreateCommand("end").   //end voting for a poll and clear all variables that need to be cleared
                 Do(async (e) =>
                 {
@@ -231,15 +229,26 @@ namespace DalaiLama_bot
                         commandDenied(e.Channel);
                     }
                 });
+
+                //command to show the results of the last held poll, can only be called after a poll has ended untill the ending of a next poll
                 cgb.CreateCommand("lastresult").
                 Do(async (e) =>
                 {
                     await e.Channel.SendMessage(pollResults);
                 });
+
+                //command to show the stats of the poll, can only be called during voting
                 cgb.CreateCommand("stats").
                 Do(async (e) =>
                 {
-                    await e.Channel.SendMessage(getVoteStats());
+                    if (isPollStarted)
+                    {
+                        await e.Channel.SendMessage(getVoteStats());
+                    }
+                    else
+                    {
+                        commandDenied(e.Channel);
+                    }
                 });
 
 
@@ -289,6 +298,7 @@ namespace DalaiLama_bot
             answers.Add(answer);
             answerPosition++;
         }
+
         private string getVoteStats()
         {
             voteStats += "poll:\t*" + pollQuestion + "*\n";

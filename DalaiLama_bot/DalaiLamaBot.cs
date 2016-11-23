@@ -29,7 +29,7 @@ namespace DalaiLama_bot
         User pollCreator;
         string voteStats;
 
-        DiscordClient discord; //declaring an object of DiscordClient
+        DiscordClient discord;
 
         public DalaiLamaBot()
         {
@@ -37,18 +37,18 @@ namespace DalaiLama_bot
             compliments[0] = "Your smile is contagious."; compliments[1] = "You look great today."; compliments[2] = "You're a smart cookie."; compliments[3] = "I bet you make babies smile."; compliments[4] = "I like your style."; compliments[5] = "You have the best laugh."; compliments[6] = "I appreciate you, you've never failed to make me smile."; compliments[7] = "You are the most perfect you there is."; compliments[8] = "You're an awesome friend."; compliments[9] = "You light up the server."; compliments[10] = "You deserve a hug right now."; compliments[11] = "You should be proud of yourself."; compliments[12] = "You're more helpful than you realize."; compliments[13] = "You have a great sense of humor."; compliments[14] = "Is that your picture next to \"charming\" in the dictionary?"; compliments[15] = "Your kindness is a blessing to all who encounter it."; compliments[16] = "On a scale from 1 to 10, you're an 11."; compliments[17] = "You are brave, and that makes you incredible."; compliments[18] = "You're even more beautiful on the inside than you are on the outside."; compliments[19] = "Your eyes are breathtaking."; compliments[20] = "You are having a positive impact on the world."; compliments[21] = "You're like sunshine on a rainy day."; compliments[22] = "You bring out the best in other people."; compliments[23] = "You're a great listener."; compliments[24] = "How is it that you always look great, even in sweatpants?"; compliments[25] = "Everything would be better if more people were like you!"; compliments[26] = "I bet you sweat glitter."; compliments[27] = "When you're not afraid to be yourself is when you're most incredible."; compliments[28] = "Colors seem brighter when you're around.";
             compliments[29] = "You're wonderful."; compliments[30] = "Jokes are funnier when you tell them."; compliments[31] = "You're better than a triple-scoop ice cream cone. With sprinkles."; compliments[32] = "Your hair looks stunning."; compliments[33] = "You're one of a kind!"; compliments[34] = "You're inspiring."; compliments[35] = "You should be thanked more often. So thank you!!"; compliments[36] = "Our community is better because you're in it."; compliments[37] = "Someone is getting through something hard right now because you've got their back. "; compliments[38] = "Everyone gets knocked down sometimes, but you always get back up and keep going."; compliments[39] = "You're a candle in the darkness"; compliments[40] = "You're a great example to others."; compliments[41] = "You are like a spring flower, beautiful and vivacious."; compliments[42] = "You're more fun than bubble wrap."; compliments[43] = "Your voice is magnificent."; compliments[44] = "The people you love are lucky to have you in their lives."; compliments[45] = "Any team would be lucky to have you on it."; compliments[46] = "If you were a booger, I'd pick you."; compliments[47] = "In high school I bet you were voted \"most likely to keep being awesome.\""; compliments[48] = "You're someone's reason to smile."; compliments[49] = "You're even better than a unicorn, because you're real."; compliments[50] = "The way you treasure your loved ones is incredible."; compliments[51] = "You're really something special."; compliments[52] = "You're a gift to those around you."; compliments[53] = " I find you to be a fountain of inspiration."; compliments[54] = "You really deserve a compliment! Because you are simply awesome."; compliments[55] = "I really enjoy spending time with you."; compliments[56] = "If I freeze, it's not a computer virus.  I was just stunned by your beauty."; compliments[57] = "If I freeze, it's not a computer virus.  I was just stunned by your beauty."; compliments[58] = "I'd like to know why you're so beautiful."; compliments[59] = "I just wanted you to know that you're a fantastic human being and let no one tell you otherwise!";
 
-            discord = new DiscordClient(x =>    //discord log stuff
+            discord = new DiscordClient(x =>   
             {
                 x.LogLevel = LogSeverity.Info;
                 x.LogHandler = log;
             });
 
-            discord.UsingAudio(x => //some audio stuff not in use yet
+            /*discord.UsingAudio(x => //some audio stuff not in use yet
             {
                 x.Mode = AudioMode.Outgoing;
             });
-
-            discord.UsingCommands(x =>  //defining the prefix for a command and allowing mentions of the bot instead of a prefix
+            */
+            discord.UsingCommands(x => 
             {
                 x.PrefixChar = '!';
                 x.AllowMentionPrefix = true;
@@ -65,7 +65,7 @@ namespace DalaiLama_bot
 
             {
                 await e.Message.Delete();
-                await e.Server.GetChannel(248177041847877634).SendMessage(e.GetArg("confession"));
+                await e.Server.GetChannel(248177041847877634).SendMessage(e.GetArg("confession")); //takes the command in any channel and sends it to channel #confessions
             });
 
             //command for giving a random compliment to a user
@@ -83,8 +83,8 @@ namespace DalaiLama_bot
                 .Do(async (e) =>
                 {
                     string roles ="";
-                    IEnumerable<Role> lol = e.Server.Roles;
-                    foreach (Role role in lol)
+                    IEnumerable<Role> rolesEnum = e.Server.Roles;
+                    foreach (Role role in rolesEnum)
                     {
                         roles += role.Name + ": " + role.Id.ToString() + "\n";
 
@@ -274,13 +274,16 @@ namespace DalaiLama_bot
                 discord.SetGame("!dalai help");
             });
         }
+        //end of constructor 
 
+        //method to get a random compliment
         private string compliment()
         {
             int i = rnd.Next(compliments.Length);
             return compliments[i];
         }
 
+        //
         private void addAnswerToList(string answer)
         {
             answers.Add(answer);
